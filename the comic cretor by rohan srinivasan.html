@@ -1,0 +1,288 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>The Comic Creator by Rohan</title>
+<meta name="description" content="Free Comic Creator by Rohan – create comics with drag and drop images and text online.">
+<meta name="keywords" content="comic creator, free comic maker, online comics, drag and drop comics">
+<meta name="author" content="Rohan">
+
+
+<link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+
+<style>
+/* ===== GLOBAL ===== */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+    font-family: 'Roboto', sans-serif;
+    background: linear-gradient(135deg, #ff9ebc, #ffd1e8, #ffe9f4);
+    user-select: none;
+}
+
+/* ===== SIGNUP ===== */
+#signupContainer {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    background: rgba(255, 192, 203, 0.6);
+    backdrop-filter: blur(10px);
+}
+#signupContainer h1 {
+    font-size: 48px;
+    margin-bottom: 20px;
+    text-shadow: 2px 2px 10px rgba(0,0,0,0.2);
+}
+#signupContainer input {
+    padding: 14px;
+    margin: 8px;
+    width: 300px;
+    font-size: 18px;
+    border-radius: 10px;
+    border: none;
+    outline: none;
+    box-shadow: inset 0 0 8px rgba(0,0,0,0.25);
+}
+#signupContainer button {
+    padding: 16px 34px;
+    font-size: 20px;
+    font-weight: bold;
+    background: linear-gradient(145deg,#2ecc71,#27ae60);
+    color: white;
+    border: none;
+    border-radius: 14px;
+    cursor: pointer;
+    box-shadow: 0 8px 0 #1e8449, 0 14px 25px rgba(0,0,0,0.35);
+    transition: all .15s ease;
+}
+#signupContainer button:hover { transform: translateY(-2px); }
+#signupContainer button:active {
+    transform: translateY(4px);
+    box-shadow: 0 4px 0 #1e8449;
+}
+
+/* ===== TITLE ===== */
+#topTitle {
+    text-align: center;
+    margin: 15px 0;
+}
+#topTitle h1 {
+    font-size: 56px;
+    text-shadow: 4px 4px 15px rgba(0,0,0,0.3);
+}
+#topTitle h3 {
+    margin-top: -10px;
+    color: #444;
+}
+
+/* ===== MAIN LAYOUT ===== */
+#mainArea {
+    display: flex;
+    gap: 25px;
+    padding: 20px;
+}
+
+/* ===== BUTTON PANEL ===== */
+#buttons {
+    padding: 22px;
+    border-radius: 22px;
+    background: rgba(255,255,255,0.45);
+    backdrop-filter: blur(12px);
+    box-shadow: 0 18px 35px rgba(0,0,0,0.35);
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+}
+#buttons button {
+    padding: 16px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 16px;
+    border: none;
+    cursor: pointer;
+    background: linear-gradient(145deg,#2ecc71,#27ae60);
+    color: white;
+    box-shadow: 0 7px 0 #1e8449, 0 10px 20px rgba(0,0,0,0.3);
+    transition: all .15s ease;
+}
+#buttons button:hover { transform: translateY(-2px); }
+#buttons button:active {
+    transform: translateY(4px);
+    box-shadow: 0 3px 0 #1e8449;
+}
+#panelCount {
+    font-weight: bold;
+    font-size: 18px;
+    text-align: center;
+}
+
+/* ===== PANEL AREA ===== */
+#panelArea {
+    flex-grow: 1;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px;
+    padding: 18px;
+    border-radius: 20px;
+    background: rgba(255,255,255,0.35);
+    backdrop-filter: blur(8px);
+}
+
+/* ===== COMIC PANELS ===== */
+.panel {
+    width: 300px;
+    height: 200px;
+    position: relative;
+    border-radius: 18px;
+    background:
+        radial-gradient(circle at 1px 1px, #ddd 1px, transparent 0),
+        white;
+    background-size: 14px 14px;
+    border: 3px solid rgba(0,0,0,0.25);
+    box-shadow:
+        inset 0 0 12px rgba(255,255,255,0.7),
+        0 15px 30px rgba(0,0,0,0.35);
+}
+
+/* ===== DRAGGABLE ===== */
+.draggableImage {
+    position: absolute;
+    width: 100px;
+    height: auto;
+    cursor: move;
+}
+.textBox {
+    position: absolute;
+    min-width: 90px;
+    padding: 6px;
+    background: rgba(255,255,255,0.95);
+    border-radius: 8px;
+    border: 2px dashed #333;
+    font-family: 'Comic Neue', sans-serif;
+    font-size: 16px;
+    font-weight: bold;
+    cursor: move;
+    box-shadow: 2px 2px 8px rgba(0,0,0,0.3);
+}
+</style>
+</head>
+
+<body>
+
+<!-- SIGNUP -->
+<div id="signupContainer">
+    <h1>Create Your Comic</h1>
+    <input id="username" placeholder="Username">
+    <input id="password" type="password" placeholder="Password">
+    <button id="signupBtn">Enter</button>
+</div>
+
+<!-- APP -->
+<div id="creatorInterface" style="display:none;">
+    <div id="topTitle">
+        <h1>Comic Creator</h1>
+        <h3>by Rohan</h3>
+    </div>
+
+    <div id="mainArea">
+        <div id="buttons">
+            <div id="panelCount">Panels: 0</div>
+            <button id="createPanel">Create Panel</button>
+            <button id="addText">Add Text</button>
+            <button id="addImage">Add Image</button>
+            <button id="saveComic">Save PNG</button>
+        </div>
+
+        <div id="panelArea"></div>
+    </div>
+</div>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/1.4.1/html2canvas.min.js"></script>
+
+<script>
+signupBtn.onclick = () => {
+    if (username.value && password.value) {
+        signupContainer.style.display = 'none';
+        creatorInterface.style.display = 'block';
+    } else alert("Fill all fields");
+};
+
+let panelCountNum = 0;
+createPanel.onclick = () => {
+    const p = document.createElement('div');
+    p.className = 'panel';
+    panelArea.appendChild(p);
+    panelCountNum++;
+    panelCount.innerText = "Panels: " + panelCountNum;
+};
+
+addImage.onclick = () => {
+    const panels = document.querySelectorAll('.panel');
+    if (!panels.length) return alert("Create a panel first");
+
+    const input = document.createElement('input');
+    input.type = 'file';
+    input.accept = 'image/*';
+    input.onchange = e => {
+        const reader = new FileReader();
+        reader.onload = ev => {
+            const img = document.createElement('img');
+            img.src = ev.target.result;
+            img.className = 'draggableImage';
+            img.style.left = '10px';
+            img.style.top = '10px';
+            panels[panels.length - 1].appendChild(img);
+            makeDraggable(img);
+        };
+        reader.readAsDataURL(e.target.files[0]);
+    };
+    input.click();
+};
+
+addText.onclick = () => {
+    const panels = document.querySelectorAll('.panel');
+    if (!panels.length) return alert("Create a panel first");
+
+    const t = document.createElement('div');
+    t.className = 'textBox';
+    t.innerText = 'Edit me';
+    t.style.left = '20px';
+    t.style.top = '20px';
+    panels[panels.length - 1].appendChild(t);
+    makeDraggable(t);
+
+    t.ondblclick = () => { t.contentEditable = true; t.focus(); };
+    t.onblur = () => t.contentEditable = false;
+};
+
+function makeDraggable(el) {
+    let ox, oy, down=false;
+    el.onmousedown = e => {
+        down=true;
+        ox=e.clientX-el.offsetLeft;
+        oy=e.clientY-el.offsetTop;
+        el.style.zIndex=9999;
+    };
+    document.onmousemove = e => {
+        if(!down) return;
+        el.style.left=(e.clientX-ox)+'px';
+        el.style.top=(e.clientY-oy)+'px';
+    };
+    document.onmouseup = () => down=false;
+}
+
+saveComic.onclick = () => {
+    html2canvas(panelArea,{backgroundColor:'#ffd6e6'}).then(c=>{
+        const a=document.createElement('a');
+        a.download='comic.png';
+        a.href=c.toDataURL();
+        a.click();
+    });
+};
+</script>
+
+</body>
+</html>
